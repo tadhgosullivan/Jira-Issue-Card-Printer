@@ -1360,7 +1360,7 @@ var YouTrackModule = (function (module) {
         alert("Sorry something went wrong\n\nPlease create an issue with following details at\n" + global.issueTrackingUrl + "\n\n" + error);
     }
 
-    // ##### Util Functions ############################################################################################
+    // Util Functions ##################################################################################################
 
     function textColor(text) {
 
