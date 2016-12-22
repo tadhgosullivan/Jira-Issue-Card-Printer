@@ -14325,7 +14325,7 @@ var getCardData = function (issueKey) {
         }
 
         if (data.fields.duedate) {
-            issueData.dueDate = formatDate(new Date(data.fields.duedate));
+            issueData.dueDate = new Date(data.fields.duedate);
         }
 
         issueData.hasAttachment = data.fields.attachment.length > 0;
@@ -14408,7 +14408,7 @@ var getCardData = function (issueKey, callback) {
             // TODOissueData.avatarUrl
         }
 
-        // n/a issueData.dueDate = formatDate(new Date(dueDate));
+        // n/a issueData.dueDate = new Date(dueDate);
         // n/a issueData.hasAttachment = data.fields.attachment.length > 0;
 
         if (data.find('card > properties > property > name:contains(Estimate) ~ value').length > 0) {
@@ -14490,7 +14490,7 @@ var getCardData = function (issueKey) {
         }
 
         if (data.deadline) {
-            issueData.dueDate = formatDate(new Date(data.deadline));
+            issueData.dueDate = new Date(data.deadline);
         }
 
         // TODO
@@ -14815,7 +14815,7 @@ var getCardData = function (issueKey, callback) {
         }
 
         if (data.due) {
-            issueData.dueDate = formatDate(new Date(data.due));
+            issueData.dueDate = new Date(data.due);
         }
 
         issueData.hasAttachment = data.attachments > 0;
@@ -14924,7 +14924,7 @@ var $ = require('jquery');
 var cookies = require('./lib/cookies');
 
 var global = {};
-global.version = "5.0.8";
+global.version = "5.0.9";
 global.issueTrackingUrl = "https://github.com/qoomon/Jira-Issue-Card-Printer";
 
 var issueTrackers = [
@@ -15235,7 +15235,7 @@ var fillCard = function(card, data) {
 
     //Due-Date
     if (data.dueDate) {
-        card.find(".issue-due-date").text(data.dueDate);
+        card.find(".issue-due-date").text(formatDate(data.dueDate));
     } else {
         card.find(".issue-due-box").remove();
     }
