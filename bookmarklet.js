@@ -14285,11 +14285,18 @@ var getSelectedIssueKeyList = function () {
 
 var getIssueData = function (issueKey) {
     // https://docs.atlassian.com/jira/REST/latest/
-    // var url = baseUrl() + '/rest/api/2/issue/' + issueKey + '?expand=renderedFields,names';
-    var url = baseUrl() + '/rest/agile/1.0/issue/' + issueKey + '?expand=renderedFields,names';
-    console.log("IssueUrl: " + url);
+
+    var urlAgile = baseUrl() + '/rest/agile/1.0/issue/' + issueKey + '?expand=renderedFields,names';
+    var urlClassic = baseUrl() + '/rest/api/2/issue/' + issueKey + '?expand=renderedFields,names';
+
     //console.log("Issue: " + issueKey + " Loading...");
-    return $.getJSON(url).then(function (responseData) {
+    return new Promise(function (fulfill, reject){
+        console.log("IssueUrl: " + urlAgile);
+        $.getJSON(urlAgile).done(fulfill).fail( function() {
+                console.log("IssueUrl: " + urlClassic);
+                $.get(urlClassic).done(fulfill).fail(reject);
+            });
+        }).then(function (responseData) {
         //console.log("Issue: " + issueKey + " Loaded!");
         // add custom fields with field names
         $.each(responseData.names, function (fieldKey, fieldName) {
@@ -14388,7 +14395,10 @@ var getIssueData = function (issueKey) {
     var url = "/api/v2/projects/" + project + "/cards/" + number + ".xml";
     console.log("IssueUrl: " + url);
     //console.log("Issue: " + issueKey + " Loading...");
-    return $.get(url);
+    return new Promise(function (fulfill, reject){
+        $.get(url).done(fulfill).fail(reject);
+    });
+
 };
 
 var getCardData = function (issueKey, callback) {
@@ -14472,7 +14482,9 @@ var getIssueData = function (issueKey) {
     var url = 'https://www.pivotaltracker.com/services/v5/stories/' + issueKey + "?fields=name,kind,description,story_type,owned_by(name),comments(file_attachments(kind)),estimate,deadline";
     console.log("IssueUrl: " + url);
     //console.log("Issue: " + issueKey + " Loading...");
-    return $.getJSON(url);
+    return new Promise(function (fulfill, reject){
+        $.getJSON(url).done(fulfill).fail(reject);
+    });
 };
 
 var getCardData = function (issueKey) {
@@ -14790,7 +14802,9 @@ var getIssueData = function (issueKey) {
     var url = "/1/cards/" + issueKey + "?members=true";
     console.log("IssueUrl: " + url);
     //console.log("Issue: " + issueKey + " Loading...");
-    return $.getJSON(url);
+    return new Promise(function (fulfill, reject){
+        $.getJSON(url).done(fulfill).fail(reject);
+    });
 };
 
 var getCardData = function (issueKey, callback) {
@@ -14864,7 +14878,9 @@ var getIssueData = function (issueKey) {
     var url = '/youtrack/rest/issue/' + issueKey + '?';
     console.log("IssueUrl: " + url);
     //console.log("Issue: " + issueKey + " Loading...");
-    return $.getJSON(url).then(function (responseData) {
+    return new Promise(function (fulfill, reject){
+            $.getJSON(url).done(fulfill).fail(reject);
+        }).then(function (responseData) {
         //console.log("Issue: " + issueKey + " Loaded!");
         $.each(responseData.field, function (key, value) {
             // add fields with field names
@@ -14924,7 +14940,7 @@ var $ = require('jquery');
 var cookies = require('./lib/cookies');
 
 var global = {};
-global.version = "5.0.9";
+global.version = "5.1.0";
 global.issueTrackingUrl = "https://github.com/qoomon/Jira-Issue-Card-Printer";
 
 var issueTrackers = [
